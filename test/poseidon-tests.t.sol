@@ -120,16 +120,16 @@ contract PoseidonContractTest is Test {
         // In neptune we use domain separation, so first field element doesn't hold actual data - rather service information
         PoseidonU3bn256.HashInputs4 memory state = PoseidonU3bn256.HashInputs4(
             0x0000000000000000000000000000000000000000000000000000000000000000,
-            0x1ee7d34044ad90f56d5a213d4295d078134fdf64359ac13c4665c2c92d88ddc2,
-            0x20dc7bb49f54c044a1e7ab8ed2cc2e0f075f785f64badc731819237a82399b11,
-            0x1b281e634a8548da6087ab51a64913bc5ef08cb1244273e27f254dd78f688a26
+            0x17d423ad34058a7b03c51e1358d687d04abed1212bac7c7ad153acff9a417ce0,
+            0x0be0c1d8d438458da1218ad89343ec1fa840305aecb1e3ddc1fcbc23180658c7,
+            0x1086a059dab79eba9c8d9e763e2364b6a6d6ecd38d15fe9d20281b4146eab938
         );
 
         uint actual = PoseidonU3bn256.hash(state, bn256CurveModulus);
 
         console.logBytes32(bytes32(actual));
 
-        uint expected = 0x17e4daaefcb9dfbe3e66154805e428a2b5bcfca505645e06d22e1e09aaefe78d;
+        uint expected = 0x18dfb0d9ad6038505aa4b825df082553208a66a55805333460ede23c284adba8;
 
         assertEq(expected, actual);
     }
@@ -155,14 +155,14 @@ contract PoseidonContractTest is Test {
         // In neptune we use domain separation, so first field element doesn't hold actual data - rather service information
         PoseidonU1bn256.HashInputs2 memory state = PoseidonU1bn256.HashInputs2(
             0x0000000000000000000000000000000000000000000000000000000000000000,
-            0x27430e6fb5c02b5854393eb19f03202c19c923b90293e835b85bd2ff96ed1394
+            0x180d7e36fdce01718d2eace09c24d29090441204d62a3c9dabe8773b0bad1f77
         );
 
         uint actual = PoseidonU1bn256.hash(state, bn256CurveModulus);
 
         console.logBytes32(bytes32(actual));
 
-        uint expected = 0x2c6611eca493a3abcd5695c0fd279fb0c4e722457e43154c84c49bb4383bbba0;
+        uint expected = 0x21bc4471a748d39a483d4e40ba2ed2c8fe9a9a23b5e1512dda38af5590633fb6;
 
         assertEq(expected, actual);
     }
