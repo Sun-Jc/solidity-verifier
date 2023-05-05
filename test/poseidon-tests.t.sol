@@ -45,12 +45,66 @@ contract PoseidonContractTest is Test {
         );
     }
 
+    /*
+    let n = 10;
+    let mut rng = rand_core::OsRng;
+    let mut nums = (0..n)
+        .into_iter()
+        .map(|_| {
+        let scalar = Scalar::random(&mut rng);
+        scalar
+        })
+        .collect::<Vec<Scalar>>();
+
+    println!("{:?}", nums);
+
+    let hasher: Poseidon<Scalar> = Poseidon::default();
+
+    {
+        let h = hasher.hash(&[nums[0]]);
+        println!("hash 1: {:?}", h);
+    }
+
+    {
+        let h = hasher.hash2(nums[0], nums[1]);
+        println!("hash 2: {:?}", h);
+    }
+
+    {
+        let h = hasher.hash3(nums[0], nums[1], nums[2]);
+        println!("hash 3: {:?}", h);
+    }
+
+    {
+        let h =
+        hasher.hash5_constrained(nums[0], nums[1], nums[2], nums[3], nums[4]);
+        println!("hash 5: {:?}", h);
+    }
+
+    {
+        let h = hasher.hash10(
+        nums[0], nums[1], nums[2], nums[3], nums[4], nums[5], nums[6], nums[7],
+        nums[8], nums[9],
+        );
+        println!("hash 10: {:?}", h);
+    }
+     */
+
     function testPoseidonNeptuneU10Bn256Compatibility() public {
         // In neptune we use domain separation, so first field element doesn't hold actual data - rather service information
         PoseidonU10bn256.HashInputs11 memory state = PoseidonU10bn256
             .HashInputs11(
                 0x0000000000000000000000000000000000000000000000000000000000000000,
-                0x24df6d2cd107458676cfab68d7a37ab92140d8602231c35c9527df2417a9324f, 0x1ee7d34044ad90f56d5a213d4295d078134fdf64359ac13c4665c2c92d88ddc2, 0x1b281e634a8548da6087ab51a64913bc5ef08cb1244273e27f254dd78f688a26, 0x107df0a68b34f43b1c3bc3b2617bf4fa161944dfdf66fd7614d161053606f040, 0x047c992bb9dce644c2de4441503f048aa205499dfe980d50005bebc49f716d36, 0x2d2a87c4ca3ce2d5b4e69f46f3a8c981d411dc81b240f8cf096c7b9ca4661929, 0x0821d35247ccf6d23be1251788415dec4be1a0a4132d15bb410873ff8c7a9f63, 0x02259ecc0f79160b1864c1e912e7a565a7793cbd7d1943f69ee9f5954079198a, 0x1ee2ae3c1b035d7400d77b00c4c9ba7b646241abe217fe76772d9855ca75d526, 0x24ba2e1b9baa896ecdbb37e8d4cd9e9d0cbc0adc0c498c2f9b9f045571ae56e7
+                0x24df6d2cd107458676cfab68d7a37ab92140d8602231c35c9527df2417a9324f,
+                0x1ee7d34044ad90f56d5a213d4295d078134fdf64359ac13c4665c2c92d88ddc2,
+                0x1b281e634a8548da6087ab51a64913bc5ef08cb1244273e27f254dd78f688a26,
+                0x107df0a68b34f43b1c3bc3b2617bf4fa161944dfdf66fd7614d161053606f040,
+                0x047c992bb9dce644c2de4441503f048aa205499dfe980d50005bebc49f716d36,
+                0x2d2a87c4ca3ce2d5b4e69f46f3a8c981d411dc81b240f8cf096c7b9ca4661929,
+                0x0821d35247ccf6d23be1251788415dec4be1a0a4132d15bb410873ff8c7a9f63,
+                0x02259ecc0f79160b1864c1e912e7a565a7793cbd7d1943f69ee9f5954079198a,
+                0x1ee2ae3c1b035d7400d77b00c4c9ba7b646241abe217fe76772d9855ca75d526,
+                0x24ba2e1b9baa896ecdbb37e8d4cd9e9d0cbc0adc0c498c2f9b9f045571ae56e7
             );
 
         uint actual = PoseidonU10bn256.hash(state, bn256CurveModulus);
@@ -85,7 +139,8 @@ contract PoseidonContractTest is Test {
         PoseidonU2bn256.HashInputs3 memory state = PoseidonU2bn256.HashInputs3(
             0x0000000000000000000000000000000000000000000000000000000000000000,
             0x27430e6fb5c02b5854393eb19f03202c19c923b90293e835b85bd2ff96ed1394,
-0x20dc7bb49f54c044a1e7ab8ed2cc2e0f075f785f64badc731819237a82399b11);
+            0x20dc7bb49f54c044a1e7ab8ed2cc2e0f075f785f64badc731819237a82399b11
+        );
 
         uint actual = PoseidonU2bn256.hash(state, bn256CurveModulus);
 
