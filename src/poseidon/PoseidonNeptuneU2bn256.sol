@@ -1,915 +1,534 @@
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.0; 
 
-// This contract is for debugging/testing purposes
-library PoseidonU2bn256 {
-    struct HashInputs3 {
-        uint t0;
-        uint t1;
-        uint t2;
-    }
+ // This contract is for debugging/testing purposes 
+ library PoseidonU2bn256 
+ { 
+ struct HashInputs3 
+ { 
+ uint t0;
+uint t1;
+uint t2; 
+ }
+ 
+ function mix(HashInputs3 memory i, uint q) internal pure 
+{
+HashInputs3 memory o;
 
-    function mix(HashInputs3 memory i, uint q) internal pure {
-        HashInputs3 memory o;
+o.t0 = 0;
+o.t0 = addmod(o.t0, mulmod(i.t0, 0x2042def740cbc01bd03583cf0100e59370229adafbd0f5b62d414e62a0000001, q), q);
+o.t0 = addmod(o.t0, mulmod(i.t1, 0x244b3ad628e5381f4a3c3448e1210245de26ee365b4b146cf2e9782ef4000001, q), q);
+o.t0 = addmod(o.t0, mulmod(i.t2, 0x135b52945a13d9aa49b9b57c33cd568ba9ae5ce9ca4a2d06e7f3fbd4c6666667, q), q);
 
-        o.t0 = 0;
-        o.t0 = addmod(
-            o.t0,
-            mulmod(
-                i.t0,
-                0x010000a0624e412db6f5d0fbda9a227093e50001cf8335d01bc0cb40f7de4220,
-                q
-            ),
-            q
-        );
-        o.t0 = addmod(
-            o.t0,
-            mulmod(
-                i.t1,
-                0x010000f42e78e9f26c144b5b36ee26de450221e148343c4a1f38e528d63a4b24,
-                q
-            ),
-            q
-        );
-        o.t0 = addmod(
-            o.t0,
-            mulmod(
-                i.t2,
-                0x676666c6d4fbf3e7062d4acae95caea98b56cd337cb5b949aad9135a94525b13,
-                q
-            ),
-            q
-        );
+o.t1 = 0;
+o.t1 = addmod(o.t1, mulmod(i.t0, 0x244b3ad628e5381f4a3c3448e1210245de26ee365b4b146cf2e9782ef4000001, q), q);
+o.t1 = addmod(o.t1, mulmod(i.t1, 0x135b52945a13d9aa49b9b57c33cd568ba9ae5ce9ca4a2d06e7f3fbd4c6666667, q), q);
+o.t1 = addmod(o.t1, mulmod(i.t2, 0x285396b510feb022c442e4c2c1411ef84c2b4191bac53323b891a1fb48000001, q), q);
 
-        o.t1 = 0;
-        o.t1 = addmod(
-            o.t1,
-            mulmod(
-                i.t0,
-                0x010000f42e78e9f26c144b5b36ee26de450221e148343c4a1f38e528d63a4b24,
-                q
-            ),
-            q
-        );
-        o.t1 = addmod(
-            o.t1,
-            mulmod(
-                i.t1,
-                0x676666c6d4fbf3e7062d4acae95caea98b56cd337cb5b949aad9135a94525b13,
-                q
-            ),
-            q
-        );
-        o.t1 = addmod(
-            o.t1,
-            mulmod(
-                i.t2,
-                0x01000048fba191b82333c5ba91412b4cf81e41c1c2e442c422b0fe10b5965328,
-                q
-            ),
-            q
-        );
+o.t2 = 0;
+o.t2 = addmod(o.t2, mulmod(i.t0, 0x135b52945a13d9aa49b9b57c33cd568ba9ae5ce9ca4a2d06e7f3fbd4c6666667, q), q);
+o.t2 = addmod(o.t2, mulmod(i.t1, 0x285396b510feb022c442e4c2c1411ef84c2b4191bac53323b891a1fb48000001, q), q);
+o.t2 = addmod(o.t2, mulmod(i.t2, 0x06e9c21069503b73ac9dc0d0edede80d4ee2d80a5a8834a709b290cbfdb6db6e, q), q);
 
-        o.t2 = 0;
-        o.t2 = addmod(
-            o.t2,
-            mulmod(
-                i.t0,
-                0x676666c6d4fbf3e7062d4acae95caea98b56cd337cb5b949aad9135a94525b13,
-                q
-            ),
-            q
-        );
-        o.t2 = addmod(
-            o.t2,
-            mulmod(
-                i.t1,
-                0x01000048fba191b82333c5ba91412b4cf81e41c1c2e442c422b0fe10b5965328,
-                q
-            ),
-            q
-        );
-        o.t2 = addmod(
-            o.t2,
-            mulmod(
-                i.t2,
-                0x6edbb6fdcb90b209a734885a0ad8e24e0de8ededd0c09dac733b506910c2e906,
-                q
-            ),
-            q
-        );
-
-        i.t0 = o.t0;
-        i.t1 = o.t1;
-        i.t2 = o.t2;
-    }
-
-    function ark(
-        HashInputs3 memory i,
-        uint q,
-        HashInputs3 memory c
-    ) internal pure {
-        HashInputs3 memory o;
-
-        o.t0 = addmod(i.t0, c.t0, q);
-        o.t1 = addmod(i.t1, c.t1, q);
-        o.t2 = addmod(i.t2, c.t2, q);
-
-        i.t0 = o.t0;
-        i.t1 = o.t1;
-        i.t2 = o.t2;
-    }
-
-    function sbox_full(HashInputs3 memory i, uint q) internal pure {
-        HashInputs3 memory o;
-
-        o.t0 = mulmod(i.t0, i.t0, q);
-        o.t0 = mulmod(o.t0, o.t0, q);
-        o.t0 = mulmod(i.t0, o.t0, q);
-        o.t1 = mulmod(i.t1, i.t1, q);
-        o.t1 = mulmod(o.t1, o.t1, q);
-        o.t1 = mulmod(i.t1, o.t1, q);
-        o.t2 = mulmod(i.t2, i.t2, q);
-        o.t2 = mulmod(o.t2, o.t2, q);
-        o.t2 = mulmod(i.t2, o.t2, q);
-
-        i.t0 = o.t0;
-        i.t1 = o.t1;
-        i.t2 = o.t2;
-    }
-
-    function sbox_partial(HashInputs3 memory i, uint q) internal pure {
-        HashInputs3 memory o;
-
-        o.t0 = mulmod(i.t0, i.t0, q);
-        o.t0 = mulmod(o.t0, o.t0, q);
-        o.t0 = mulmod(i.t0, o.t0, q);
-
-        i.t0 = o.t0;
-    }
-
-    function hash(HashInputs3 memory i, uint q) internal pure returns (uint) {
-        // validate inputs
-        require(i.t0 < q, "INVALID_INPUT");
-        require(i.t1 < q, "INVALID_INPUT");
-        require(i.t2 < q, "INVALID_INPUT");
-
-        // round 0
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x5d30d6e45b9908bf59855b4c90b13c038fb820734c3dcb5b1c78bb95d7ab5110,
-                0x00dda367e3623837c262fadbae2c42b3be3c0099cac7538c4a3902e1e5c48026,
-                0xb660616783b4f542768bdd68c990d8735f86b0a61c448a57322e37ba52822e13
-            )
-        );
-        sbox_full(i, q);
-        mix(i, q);
-        // round 1
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0xe78b10dd26e200d5e4030ad51bdae4637c856be0ed212e9d551f3bdf7369ff0d,
-                0xbdabf122483cabdf2c327be5c991ea52caa7f9b1878594b25ed790023e46e905,
-                0x38da424efd7605845879bc15b069bfeea2a6360319b89c60318e92b9a8c66523
-            )
-        );
-        sbox_full(i, q);
-        mix(i, q);
-        // round 2
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x5884ae9b9cc341647a0b13c3aecc9f963af557423dbb1c8150f71116a08baa16,
-                0x2df4288c1dbfa28afee89b3bfd4e02ea649e42699006f46a8c97f18ba5b11727,
-                0xbf92725553db9d67e10286b83c6c83bc38fb2e49990085747c2d704c60bd262d
-            )
-        );
-        sbox_full(i, q);
-        mix(i, q);
-        // round 3
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0xe1855a24eb2ded7fed41a53246117a7c4f027ca27f5981973cab4cc4e64d4a17,
-                0x0968ec04304a31283b215a988df6b4591a7d6edc641454595c8783b0cb5e3e1d,
-                0xae4a9a2fb584fe0a6a4c1501e60487be0b1b2cf5b52d289eb68799586edb4e01
-            )
-        );
-        sbox_full(i, q);
-        mix(i, q);
-        // round 4
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0xd5cc8fa2a6e2f263afbe4591dd07c98afd68d3e7ea48a501b6743d061e8d0d0e,
-                0xa28d062d311ccce65f6d42c62ffcd3034b492f3caee3e1ccf3139dfb8fae0206,
-                0xb3a677118ccc67fa74c528181c707eb8aad9d63031d6a846938e107d038f8623
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 5
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0xd200af787774176ed3508fbd5bd66e1454e24e6b77e5166f2d0e85cea9b57310,
-                0xc443655940911d780340e439dc849976fdd5dbc3cd9664e29f63a2b526a23d07,
-                0xe6c9ddb596dedbf032a1a80fda4839fef34696366ddcd06f52b3b3aacafafb2c
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 6
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x8ee88aa35cdf32f0c4382880590d4c9519baff864b16ac26b777b2695a85c00f,
-                0xe0e017f92d631fd8964c1e4befcd233fc04ec5074ab409bead07e4f196f04926,
-                0x40ca1804b16cff0a3a0f8476ac539b8212facfd149edc705a2480fc1a80a9c0f
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 7
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0xe1383843f8b7fff0b64731bebe10398219fec2afd4634639b01e4f707f7a5411,
-                0x7d78619be825ed2c28a7ea6779003a5f2a65a70d640ed1c887346d07c7f7af16,
-                0x860b48de77900fc878aef083f4479146fa3bbaafc30694bd9d35222849061a01
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 8
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x34816047e4d963847d317f247f6a3c4c1c9b396668a3063bdd68f1e44f087f0d,
-                0x27b165cba718cafdf50e12d07ceacc0ab2c946ff7900770724c36df429608b07,
-                0xae93170757eef2130c3383bfae41e89c932f690abbae8436494b86de224eea2d
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 9
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x5f64572a8a936d943c24aae48054affe32f0b0e4757f20c081391bc9a0cbcb08,
-                0x5e368cbb59c0d64801b30e827bebe778693e6cc541a75e02e1bd9da79ef9d802,
-                0xa319e2b7ad80699f726e31ab71b1cd131b4a28c0eebe64271d12bdcd0b2d9b10
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 10
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x35fef8b9d90befefd21ff3660c0d32dc44da4cda6249928cbf7162dc2658a206,
-                0xa4bc32cc0bd2339f2dfa03940e562e87a951d62f204eb152bbec991ce1e4631a,
-                0x5b7d683acf6cf084149d76601795588cfb2d1f093cfa55e91cdfda4ceb5dfb03
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 11
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x01feb00ad8a02afe876b57c5d1e904779c1b7707d6af5c6c97434f7571c1da0b,
-                0x51e75c6d97ef443f67c05157dc93d9fa20ef13474374270ac821b7cf2b503a25,
-                0xc5c27136121bb845ba3c896e658242c50dda310d13dd5a25294853ec0a30210e
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 12
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x369a229fe6203b1fa2db51f9ef53913d9174d28f50512778b3bbf66183749d0d,
-                0xc8df5e57b1adffee341df8649f22e0d138fa5fe2abd7594079d00a861de9af1e,
-                0x9b6b9b66aa9dd078488bbc43879b06d489f57e94770bbf04cd7723f32a790812
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 13
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0xa478ec109bcb21a40468396c67221eef43ac2fcaad20c522ba0e90fdf093850c,
-                0xba0e7c23da1875348cbc06b00509aa9b26cf27dc985b53c27fef52ff8718d21b,
-                0x11a226b598302b38dd96e02eef0d860a947452057c7787c5f9a425c4706d281f
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 14
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x5cc10a24a0590327afe0adb51099f36f9837fc8dc98257e1617674a6cb95f212,
-                0xaaf4cec522d96a4096d6918bd438b65c7bb9ee65c56ef022e2bd03027974b527,
-                0xb73dcff14c0141b1763c126ac9f3a404aa7978bfb4f0cc062e9c9bed00c2480b
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 15
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x5e80cb7492319504defcdd1589b6bd8bdb93b6321f8c5a98d2efd37d50422510,
-                0x1a96923824527ac1ebae27d80c1e8f53d8c0e0b0f2a5c965d8060f2951cf9e17,
-                0xe7d0f87aefd269f8931ca2efedeebcddd3185447d74e6c43b0a4f22d25955409
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 16
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x04fdddeb1811cc2cf0f54b9f00053a85af0fab870d67dc9ac088e1fe0bf79901,
-                0x4e89e81fc794fdd9f041e5024b454edeb81ac137031a0f44ac12661e6524442c,
-                0x01d4efdae8b6912aef22d096c3ccef587819aca49a03255d5ff9fa99b1a62610
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 17
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x47f4919c06c4254c3857a351e61fcd1c5eb25b5479e1a4b97cede9120f419215,
-                0xc18e95e25005e52d7f98c8f32df7a21abaca7af00b22f78ad1ccec1d36a6b22e,
-                0x3ac8c641685d3a1b4300833c523952aacf67eade8086c47b962f832f67184e00
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 18
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x3c278f5f23ad626bfadec323e27d34cc9c549358c048faf43f1a1f46388ad515,
-                0xfe36e5d7de6ad2544568502f69204ab7c200bcd8cddc9cc5b4d60eb03c368b2f,
-                0xc7355c72f9e4ce92afa5041b0dc60d1adf23aa0c13fab5d1a5cc93ce5d3a7229
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 19
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0xaa8a6a4a04325255976ea4c72ca7291e64096dcf2e56c3e4097e6f6a5ad9542c,
-                0xd1f94010d87ed06edbeb12a536e9e9a7573f78c98b1598d1474e40a747c8622a,
-                0xdc9d48427fffbac6b985dfb5add4f299bb389c283487eb9f3a5bc556c0cf7612
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 20
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x1744459a73aecfd3a20840c738822a0167298c967fe423c44dda68a0b94f0727,
-                0xf6ba18a3a33f6977f01a5779b3bc3faea7783e5bee6278dbf0d3665d23ccb313,
-                0x315e5323da8afd5ed7dd51c3aa0bb82ce4a6925cb4af613b0633d98ebb5c4f1d
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 21
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x2962666889c91e14e8a96ae4c92a82283b037f454454d1942163e3f753044a2d,
-                0x3ccac6a45b18858d8b69bf4512d9201f03e724ff4c00ec4c309078b78d409609,
-                0x7fbab1cb8122fccf9b52b381b318e687aed73f930f88bdbcb473bcd733444c15
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 22
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0xfdb4ee04e2fdff378afa9c8c7fe41d58b5e2c567df4a59eb3e78fa2d8c73fe0d,
-                0xcb22be8618ccf4d45db5bfd32b7701e9246b4acedbb3c8f0462353abfc179500,
-                0xf24eeac756dc245f6b13eb604890143905c41cc92298fb34bd4aa87b9bf6870e
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 23
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x503dcefb521f0575f207cee00e38d3b5715efeebb47faf78d118b3f3e7ebf620,
-                0xc96ab1e8711bbd1d72cc920d91b59dd5551e72dd06c1f04e8c37ddc44d93931f,
-                0x9d4ff8f1e21aed5c2389f0253058e23e4a15ce622e34ed622f09459faf01961c
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 24
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0xb0134b497b5a72706853ade1bb3e9e1412ac281a917f4b2dc185a397671edd04,
-                0xbaefcdefbfa37caa56fff89aa33a795beeeaea4eeda0164d61db3098d5a5e723,
-                0x1d099fc6fe0fcb98e506265d7f553ba7f6cf5a6938d1014e389d1ec4d6f2f812
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 25
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0xb7d26890e9303245948b9cfc318f67dc6b3e4551c8d85eecfcf8bcf853663701,
-                0x78ea0e5425d1eee4cbed18880513bac7740b927d433b4c7b4007941623bfb026,
-                0x3d11672fb0e44326b9c06a5bd7813d8769dc0edc1ff583e344826d7f79a2a803
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 26
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x7f698b1962a86141ad3629a664e02d2cd649318418f2ce9ae9ac4c2695e45807,
-                0x78923956fc1f46bbe8594285d48bde7857bed3711e67385f6d99a8424ac07319,
-                0xe5a6761e1a69e196189697dc5738eeb85e72c354d08ab64ce3ec99ebeb7df22f
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 27
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0xd2e3a9ed251d89745f6d6817a73018e99cef4a47473e5404a3bd66b7ea16231b,
-                0xd3543477865b8b24444a0dd499031da1fe60d16c838a5138e8d143459e6c1829,
-                0x6f15620dc839f309d74269cb0a5ec2cfdf42620437809de2f3b04faf9ae0b52f
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 28
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0xf7e5dcfc87965436cbdc6515fc754d58e40bdfeb9d246e7c49c48da01468022d,
-                0xd529fd7da77d42eb2950a2e7e0dad5abdbdc050565595353b29391f94005531f,
-                0x0c6a7a92359e9e8f101b917b1d6308f0e030f58cd75d8c8336f2fa4cd81a9f05
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 29
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0xa973a1d3642af3794bd58dc3343fda72873bcad7e3298d3fe158736e51b80c0f,
-                0xb9acfade5bd7cf624ad4ef1ab3e013a4048ad31040ba305db0d3a21f2f0e7b0a,
-                0x2a6ef065316d899a27ce8e75edf72c5e83d7b592af0f9d6a7c3f464aee5c7829
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 30
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x414acde9c4e199156b9bc4a01d80aa1a15f59841ce5312eac7570a5251c95005,
-                0x945a8d52d5844d7efeed8abea3da2706b63219726f45603b0d679aa913304f0e,
-                0x61a47ffe3cc8ddcb3b37c1362567cf2b9fd9d8fe3222d0a05577bef5f5596111
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 31
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x47ff5cde6757bd4af99eac52c8469a69e8871ec37a702decca0d9d6b52b1f305,
-                0xe56fa16a27361161fe6350587099b300e821218038f54f7610e2444589045e09,
-                0x39cf3dec8d114c8f77efda728927d18dca8d7578f217ff48bb129c237b48de2a
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 32
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x28419e0f930124829d86eede8a42ed86e1a0323346d226db6e47a2aba13a3e05,
-                0x3fe2e5300879880d0cceea6ac22e4018e5628a928060c7497b859d2623ebf92d,
-                0xd590157cba87a19c86d1f1769d8d05b734a4c312944e2e3778a9cb9e46834822
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 33
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x8b96166f80cdc220527323a77ed906a181568313f9cfed89bb412b314cba0d0e,
-                0x7b33259315c495e716c0feb0b256f4bed789fbf8d93b29edecc1ff058fe09c2d,
-                0x98e948c2bda46a9b3da225984b085fe67c1ef67d7be381f7c5adc54995642b16
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 34
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0xc836090a3f73066ad383d51d74c107f388cde2692e30bfda806934c260a12323,
-                0x87db9a634c3802eac5d58f880f8bf012a6af2b2b3490f2bf0629c43490627d04,
-                0xc1e57e5d92ea2f76f3cbcada3299e689e355aa67611b2987bb68acaf75937416
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 35
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0xf9247555b208e522ae52d82d31377f58d61ababd38d9f4171123215fba33f614,
-                0x82b7acc9833789f76981dab2fe8e160678793aa2cb899ed9d95af641b3f2022d,
-                0xfabf485ac5d29fb336d9ed261b0e9625b804ecde351c22fffab27ceae265f525
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 36
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0xa98ba417ae9f8ac8cd252e3ef1f5ae038235fb3e3e352cb1b6499cf8fed4eb0f,
-                0xc3d7ad41bb1365cd3543949423f5d63404dabff6de5cc986cd996045a901d011,
-                0xb490d6fa1c1778500ae400f181e4aa76d9e83ced5b9581ffe5667dcd6fb6c21c
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 37
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x6e516ffc161c1d3ddfa505f54d42e5bb68ba75d37dd5a962454bd31adc55a716,
-                0x78b0148fbe4e38569b1267d5d81cf8920237cfd2da24039ff871d8777f0e6d1c,
-                0x1d288a55399021eb267c3788ff72530a4b7313a054be259f4b153bfda7068027
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 38
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0xade87def8acf2af8bad065067cd0529241d84c8ba4d451ffb6a939a56728eb22,
-                0x946ae566e4e2bf8879260ff580bd0eb526bb2545bca42ac2f1e3d488718b121a,
-                0x93b0c55190a57419eb15c2c410451be73cb95097a8cb1335531daa285caa2f1d
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 39
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x4951481a7fee0be986e849dcca1a5b5e571fb87c03a8f9a38adc50a0411ceb28,
-                0x6e8e07671f2ba720f7c9965e3823e766b8710249d16ac97a026423cacb86251e,
-                0xbac906ed748e90f4faf038006d8bacf1e44e8aff429eecacd7334e72c7e5c713
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 40
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x3e926670a8f64f91bef1fd73e50be4355d7872153784dfc6395c92b49a05bf09,
-                0x38bdfa6df8485c4a19f936f2206ad21875f4a2921ec7cb7118120e92f375731b,
-                0x362e9c2859dc73ebf6b633ba116e7f98191059d0d627e55d532e67108f849414
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 41
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x0c6be3ecb8c351a73540ef64888baa417a48309e8de70aa046a6deafdc785319,
-                0x0e9b89a5fdca6a1aefd7a2e780f325803811641711ef4338dba0a2a2765c6a0b,
-                0xef2f4ce181f6efe4921600cd1c0b95b0ed96034aaf88492b71c4f757d1e12308
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 42
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x22b2742056b42c3ad1b97f6df99bdec5c03627a5f5bd9d302846f1d248b03316,
-                0x30e4d52ec826d23897b630ec3d5186704695a206ec95787323ab1e0fd9dd771f,
-                0x4fb951c7aee7576dd7196c72948b5d7667ab7d71f3bcaeaaf62b67b33919c709
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 43
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x7d93a12c742df3bc87856c30fe411dd97a5d00d0c5070b8df6f80e0f27398104,
-                0xe5032c17a6b1529f5b1fa476232f8aedf334444ed784193259bf4c44b1df3a00,
-                0xce898b861fb119de5ea2a5568b4f0c0d4bc7a9e942f8d33195bf23e87d4aec2e
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 44
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0xaf00898368a6c4009dac24eb4c4a48078fd02728123833a4cbf4b944b674a50e,
-                0x9089d2bdd08ec2ec055392ba7b288bf0996dc82cdda40d9aca5c91cd55a04d05,
-                0x06478f8b63e8837e8fc3b8e8508af0c34bf876197196af47d1fc261f1d5a9602
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 45
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0xb8911d055e4ca3a23fe3e2bfa3468ece52f06ef8892c189338f322964bb3971f,
-                0xb51c6dea7f0c74469036e9b5bedd5e819f6989c0cfeeed938d46eab5b063a009,
-                0x78b7467dc0977341651c29846a0cf0f16c4c53d03d7a5f59ccd7af240c824212
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 46
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0xa62d5109458bc01cd1b1aa57edd5f032987678038d6af8151d5bc1ae02c48329,
-                0xd83d4a1397cb2440b4eae01235a7d2643767a89b00bd33c2ffeb4fb4a4716313,
-                0x5e5225ee700c0ecb91eb013e8aef263ca015c2760a5dbf62838cbd9096727029
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 47
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x7d4284cea23ce3608da6a6f946f6501796c0a55bf70e9b4b259bdbc5a25c391c,
-                0x687f366f5dad3a1c7edb846925822746ce6c2029f5134fe19a4b8c52766c3502,
-                0x8e38ec93f635b0c892ae6e3140d07befec62e0634df93fdb3b46768837675a0c
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 48
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0xf5bfe65ce37a53860dd9c3660e92cc2ff75db3485e1bf39ec9bf20f7e5af2a1b,
-                0xa512968f081ff8874d7a4091c50fe9d303e21ea4ebf84828089b8b63b7877906,
-                0x6d5e6d27e436d7bb8e1a5dd75f54a17272a513632bb6ceccca4b7418024b8d14
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 49
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x47f88ead108d41c7942dcaa6b9cd5b1647c2f1e8a18086e8f8fc56cc86893f04,
-                0x811f73793a5041912a06bb23087d3bcda35ca665c5be1f00c89143ffd935f01e,
-                0x24e0bfebd4b9dac49938dd844f460a6a2f19a13986ba11ec0d325ab3e662510a
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 50
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x3bcf40a9eafbe62816ebf96941d316fe30b87ef8836ba3ba76ed2a87e9895c2b,
-                0x270601f9e388819247df5ba88dbd8f23c0d14089d03f2d4f3750974926c12506,
-                0x65d9cc5e1cbbbe0c3558322b30bbd2218274f18a43928144c63067fe5cb86b11
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 51
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0xfbab71c8a5be2e1bf59c9c5f77a3a7c41d8c45547e3766bb98a59db0a265aa11,
-                0xf5bab61f3e4cad15f2250f0ff39dcd03b99cbfb08ec7db0306c5ccb18ebd0f28,
-                0x76edf8632a7f50796c7913d7a37a666446f13a99248d74e279760812e8a36107
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 52
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x6dc92ad16f528c33edb162008f69bb30ccb39e535d1510808c87bf0af168a62b,
-                0x0cce210012873287efefdcc8b4915ce7c33d6d26511cf4edb2c1f74e91054e2f,
-                0x0448c683dff158b107ad76814ffdff83f16cce8bf2827aecd563787dd34b2729
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 53
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x1be498adbfa720bfa59dc24e394c3ee0eef8711945a50d9b3d000109d8fa480c,
-                0xd9202fc3d14201eec7c74f1bf7cc2861ca929155d613e7245998dab9f22ccf16,
-                0xc18c5cf189565da882587ecfba1970cf130c82a7a30506118bde733223d9b700
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 54
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x186eb8cdb1582ae31d86c0540749766b3bde6289609438c7ab9ae9e75a1f290f,
-                0x10f22cd9580d40afb290421b9107970db46e11263fe8b7f45c3fa396b5063425,
-                0x6158e30f16b37caf8eab6db69fc3cf0c649b23d510571cadbe740d4d14a41208
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 55
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x74f1f60ecdbb66a811de25069fe1ccadebde1b963bd139d2d5c5eb9edaa6812d,
-                0x64506f64234d326785d85531effe04cdac4deb90928945f6b2ca79d9fada221a,
-                0x1a189f28159cabd40f5b8565165a685d9a7acaf9da8cdb097decca8dae73ff1b
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 56
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x09e73ec304e9cc228a1c1efefbc4c64b1fe3793e0f7eb5920cda4a83b0f8160a,
-                0x8e54996d96ad3b311d805eef1d45161e149a00697e3581d589634c214c96e70c,
-                0xe0b39392d19e4aa05003fe4d703e6a5bc47f9481ee6b46e8d5df75f96bc02528
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 57
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x3f285870063bd3c48fdae2fd1defbdd9aafb2235a358b90976616c75cf175926,
-                0x0c8e983b9c377403acd324cf47b301a59843fd648cad2ac9b9fb79d787695a30,
-                0xeacab0528f79dfbbd0c673ef455da49213cacf8cdb1632df61be098c325aba19
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 58
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x2ec96ff93fd66ead0e8440b4002354282249ffa3217146cf190f18327f056905,
-                0xf3d7df1c45424940643652c3466baac852bf18500c65bd9caa09d4020ede0a30,
-                0x76d52ed827969107b7284d9a8b0f73e969d0dcc601311d4205aeb8e5c3afe713
-            )
-        );
-        sbox_partial(i, q);
-        mix(i, q);
-        // round 59
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x74f6953c922efbfad689912041774d820a37c43e7e048b040dbc470fb8eb2c30,
-                0x17765b42270a0ab7101c732181722ca8f29086cacbf6f3099fc1f906861eec0f,
-                0xf8b4420c824b7bcaac00cbd6709e7f12c223420afa5dc8316fe3ab388b6cb301
-            )
-        );
-        sbox_full(i, q);
-        mix(i, q);
-        // round 60
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x7e163669efa064cbf8b23ba38c652ebe3006d36ef4ea2632896f2ad6df00e81a,
-                0x62793977a7a35d9e4f0e091c89c04329260c496b8e4764fefdeb270124803f04,
-                0x8b61c007ed53f110a59876d9579776f680a148317b0ecac3384e9f3204c04c28
-            )
-        );
-        sbox_full(i, q);
-        mix(i, q);
-        // round 61
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0x02ef8eb5378f33511b2abbdc3add278597fbe495d4fbfa9c0bb7c420eacf180a,
-                0xa402d35ae4af34e185446bfed0bf5a73fe501f1d6409fc5be489cc6a2f1bc11b,
-                0x7fc048f5fb1cc42dc5091d2994c61c033ca5a61891997e77269f63948a04af27
-            )
-        );
-        sbox_full(i, q);
-        mix(i, q);
-        // round 62
-        ark(
-            i,
-            q,
-            HashInputs3(
-                0xfde8d6436dc090aaea96c5cc2a38b3ade018378ca1df8f1b8dc5544db3b56a22,
-                0x1746021d19b1d75661b795852892d68c90f620b57aa68563dcd7078886cc3424,
-                0xcf155a403be2c0358cd4b2882be8e1dca3f98e4d6bed21ef77e1c74b5062f605
-            )
-        );
-        sbox_full(i, q);
-        mix(i, q);
-
-        return i.t1;
-    }
+i.t0 = o.t0;
+i.t1 = o.t1;
+i.t2 = o.t2;
 }
+
+function ark(HashInputs3 memory i, uint q, HashInputs3 memory c) internal pure 
+{
+HashInputs3 memory o;
+
+o.t0 = addmod(i.t0, c.t0, q);
+o.t1 = addmod(i.t1, c.t1, q);
+o.t2 = addmod(i.t2, c.t2, q);
+
+i.t0 = o.t0;
+i.t1 = o.t1;
+i.t2 = o.t2;
+}
+
+function sbox_full(HashInputs3 memory i, uint q) internal pure 
+{
+HashInputs3 memory o;
+
+o.t0 = mulmod(i.t0, i.t0, q);
+o.t0 = mulmod(o.t0, o.t0, q);
+o.t0 = mulmod(i.t0, o.t0, q);
+o.t1 = mulmod(i.t1, i.t1, q);
+o.t1 = mulmod(o.t1, o.t1, q);
+o.t1 = mulmod(i.t1, o.t1, q);
+o.t2 = mulmod(i.t2, i.t2, q);
+o.t2 = mulmod(o.t2, o.t2, q);
+o.t2 = mulmod(i.t2, o.t2, q);
+
+i.t0 = o.t0;
+i.t1 = o.t1;
+i.t2 = o.t2;
+}
+
+function sbox_partial(HashInputs3 memory i, uint q) internal pure 
+{
+HashInputs3 memory o;
+
+o.t0 = mulmod(i.t0, i.t0, q);
+o.t0 = mulmod(o.t0, o.t0, q);
+o.t0 = mulmod(i.t0, o.t0, q);
+
+i.t0 = o.t0;
+}
+
+function hash(HashInputs3 memory i, uint q) internal pure returns (uint)
+{
+// validate inputs
+require(i.t0 < q, "INVALID_INPUT");
+require(i.t1 < q, "INVALID_INPUT");
+require(i.t2 < q, "INVALID_INPUT");
+
+// round 0
+ark(i, q, HashInputs3(0x1051abd795bb781c5bcb3d4c7320b88f033cb1904c5b8559bf08995be4d6305d,
+0x2680c4e5e102394a8c53c7ca99003cbeb3422caedbfa62c2373862e367a3dd00,
+0x132e8252ba372e32578a441ca6b0865f73d890c968dd8b7642f5b483676160b6)
+);
+sbox_full(i, q);
+mix(i, q);
+// round 1
+ark(i, q, HashInputs3(0x0dff6973df3b1f559d2e21ede06b857c63e4da1bd50a03e4d500e226dd108be7,
+0x05e9463e0290d75eb2948587b1f9a7ca52ea91c9e57b322cdfab3c4822f1abbd,
+0x2365c6a8b9928e31609cb8190336a6a2eebf69b015bc7958840576fd4e42da38)
+);
+sbox_full(i, q);
+mix(i, q);
+// round 2
+ark(i, q, HashInputs3(0x16aa8ba01611f750811cbb3d4257f53a969fccaec3130b7a6441c39c9bae8458,
+0x2717b1a58bf1978c6af4069069429e64ea024efd3b9be8fe8aa2bf1d8c28f42d,
+0x2d26bd604c702d7c74850099492efb38bc836c3cb88602e1679ddb53557292bf)
+);
+sbox_full(i, q);
+mix(i, q);
+// round 3
+ark(i, q, HashInputs3(0x174a4de6c44cab3c9781597fa27c024f7c7a114632a541ed7fed2deb245a85e1,
+0x1d3e5ecbb083875c59541464dc6e7d1a59b4f68d985a213b28314a3004ec6809,
+0x014edb6e589987b69e282db5f52c1b0bbe8704e601154c6a0afe84b52f9a4aae)
+);
+sbox_full(i, q);
+mix(i, q);
+// round 4
+ark(i, q, HashInputs3(0x0e0d8d1e063d74b601a548eae7d368fd8ac907dd9145beaf63f2e2a6a28fccd5,
+0x0602ae8ffb9d13f3cce1e3ae3c2f494b03d3fc2fc6426d5fe6cc1c312d068da2,
+0x23868f037d108e9346a8d63130d6d9aab87e701c1828c574fa67cc8c1177a6b3)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 5
+ark(i, q, HashInputs3(0x1073b5a9ce850e2d6f16e5776b4ee254146ed65bbd8f50d36e17747778af00d2,
+0x073da226b5a2639fe26496cdc3dbd5fd769984dc39e44003781d9140596543c4,
+0x2cfbfacaaab3b3526fd0dc6d369646f3fe3948da0fa8a132f0dbde96b5ddc9e6)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 6
+ark(i, q, HashInputs3(0x0fc0855a69b277b726ac164b86ffba19954c0d59802838c4f032df5ca38ae88e,
+0x2649f096f1e407adbe09b44a07c54ec03f23cdef4b1e4c96d81f632df917e0e0,
+0x0f9c0aa8c10f48a205c7ed49d1cffa12829b53ac76840f3a0aff6cb10418ca40)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 7
+ark(i, q, HashInputs3(0x11547a7f704f1eb0394663d4afc2fe19823910bebe3147b6f0ffb7f8433838e1,
+0x16aff7c7076d3487c8d10e640da7652a5f3a007967eaa7282ced25e89b61787d,
+0x011a06492822359dbd9406c3afba3bfa469147f483f0ae78c80f9077de480b86)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 8
+ark(i, q, HashInputs3(0x0d7f084fe4f168dd3b06a36866399b1c4c3c6a7f247f317d8463d9e447608134,
+0x078b6029f46dc32407770079ff46c9b20accea7cd0120ef5fdca18a7cb65b127,
+0x2dea4e22de864b493684aebb0a692f939ce841aebf83330c13f2ee57071793ae)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 9
+ark(i, q, HashInputs3(0x08cbcba0c91b3981c0207f75e4b0f032feaf5480e4aa243c946d938a2a57645f,
+0x02d8f99ea79dbde1025ea741c56c3e6978e7eb7b820eb30148d6c059bb8c365e,
+0x109b2d0bcdbd121d2764beeec0284a1b13cdb171ab316e729f6980adb7e219a3)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 10
+ark(i, q, HashInputs3(0x06a25826dc6271bf8c924962da4cda44dc320d0c66f31fd2efef0bd9b9f8fe35,
+0x1a63e4e11c99ecbb52b14e202fd651a9872e560e9403fa2d9f33d20bcc32bca4,
+0x03fb5deb4cdadf1ce955fa3c091f2dfb8c58951760769d1484f06ccf3a687d5b)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 11
+ark(i, q, HashInputs3(0x0bdac171754f43976c5cafd607771b9c7704e9d1c5576b87fe2aa0d80ab0fe01,
+0x253a502bcfb721c80a2774434713ef20fad993dc5751c0673f44ef976d5ce751,
+0x0e21300aec534829255add130d31da0dc54282656e893cba45b81b123671c2c5)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 12
+ark(i, q, HashInputs3(0x0d9d748361f6bbb3782751508fd274913d9153eff951dba21f3b20e69f229a36,
+0x1eafe91d860ad0794059d7abe25ffa38d1e0229f64f81d34eeffadb1575edfc8,
+0x1208792af32377cd04bf0b77947ef589d4069b8743bc8b4878d09daa669b6b9b)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 13
+ark(i, q, HashInputs3(0x0c8593f0fd900eba22c520adca2fac43ef1e22676c396804a421cb9b10ec78a4,
+0x1bd21887ff52ef7fc2535b98dc27cf269baa0905b006bc8c347518da237c0eba,
+0x1f286d70c425a4f9c587777c055274940a860def2ee096dd382b3098b526a211)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 14
+ark(i, q, HashInputs3(0x12f295cba6747661e15782c98dfc37986ff39910b5ade0af270359a0240ac15c,
+0x27b574790203bde222f06ec565eeb97b5cb638d48b91d696406ad922c5cef4aa,
+0x0b48c200ed9b9c2e06ccf0b4bf7879aa04a4f3c96a123c76b141014cf1cf3db7)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 15
+ark(i, q, HashInputs3(0x102542507dd3efd2985a8c1f32b693db8bbdb68915ddfcde0495319274cb805e,
+0x179ecf51290f06d865c9a5f2b0e0c0d8538f1e0cd827aeebc17a52243892961a,
+0x095495252df2a4b0436c4ed7475418d3ddbceeedefa21c93f869d2ef7af8d0e7)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 16
+ark(i, q, HashInputs3(0x0199f70bfee188c09adc670d87ab0faf853a05009f4bf5f02ccc1118ebddfd04,
+0x2c4424651e6612ac440f1a0337c11ab8de4e454b02e541f0d9fd94c71fe8894e,
+0x1026a6b199faf95f5d25039aa4ac197858efccc396d022ef2a91b6e8daefd401)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 17
+ark(i, q, HashInputs3(0x1592410f12e9ed7cb9a4e179545bb25e1ccd1fe651a357384c25c4069c91f447,
+0x2eb2a6361decccd18af7220bf07acaba1aa2f72df3c8987f2de50550e2958ec1,
+0x004e18672f832f967bc48680deea67cfaa5239523c8300431b3a5d6841c6c83a)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 18
+ark(i, q, HashInputs3(0x15d58a38461f1a3ff4fa48c05893549ccc347de223c3defa6b62ad235f8f273c,
+0x2f8b363cb00ed6b4c59cdccdd8bc00c2b74a20692f50684554d26aded7e536fe,
+0x29723a5dce93cca5d1b5fa130caa23df1a0dc60d1b04a5af92cee4f9725c35c7)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 19
+ark(i, q, HashInputs3(0x2c54d95a6a6f7e09e4c3562ecf6d09641e29a72cc7a46e97555232044a6a8aaa,
+0x2a62c847a7404e47d198158bc9783f57a7e9e936a512ebdb6ed07ed81040f9d1,
+0x1276cfc056c55b3a9feb8734289c38bb99f2d4adb5df85b9c6baff7f42489ddc)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 20
+ark(i, q, HashInputs3(0x27074fb9a068da4dc423e47f968c2967012a8238c74008a2d3cfae739a454417,
+0x13b3cc235d66d3f0db7862ee5b3e78a7ae3fbcb379571af077693fa3a318baf6,
+0x1d4f5cbb8ed933063b61afb45c92a6e42cb80baac351ddd75efd8ada23535e31)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 21
+ark(i, q, HashInputs3(0x2d4a0453f7e3632194d15444457f033b28822ac9e46aa9e8141ec98968666229,
+0x0996408db77890304cec004cff24e7031f20d91245bf698b8d85185ba4c6ca3c,
+0x154c4433d7bc73b4bcbd880f933fd7ae87e618b381b3529bcffc2281cbb1ba7f)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 22
+ark(i, q, HashInputs3(0x0dfe738c2dfa783eeb594adf67c5e2b5581de47f8c9cfa8a37fffde204eeb4fd,
+0x009517fcab532346f0c8b3dbce4a6b24e901772bd3bfb55dd4f4cc1886be22cb,
+0x0e87f69b7ba84abd34fb9822c91cc4053914904860eb136b5f24dc56c7ea4ef2)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 23
+ark(i, q, HashInputs3(0x20f6ebe7f3b318d178af7fb4ebfe5e71b5d3380ee0ce07f275051f52fbce3d50,
+0x1f93934dc4dd378c4ef0c106dd721e55d59db5910d92cc721dbd1b71e8b16ac9,
+0x1c9601af9f45092f62ed342e62ce154a3ee2583025f089235ced1ae2f1f84f9d)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 24
+ark(i, q, HashInputs3(0x04dd1e6797a385c12d4b7f911a28ac12149e3ebbe1ad536870725a7b494b13b0,
+0x23e7a5d59830db614d16a0ed4eeaeaee5b793aa39af8ff56aa7ca3bfefcdefba,
+0x12f8f2d6c41e9d384e01d138695acff6a73b557f5d2606e598cb0ffec69f091d)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 25
+ark(i, q, HashInputs3(0x01376653f8bcf8fcec5ed8c851453e6bdc678f31fc9c8b94453230e99068d2b7,
+0x26b0bf23169407407b4c3b437d920b74c7ba13058818edcbe4eed125540eea78,
+0x03a8a2797f6d8244e383f51fdc0edc69873d81d75b6ac0b92643e4b02f67113d)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 26
+ark(i, q, HashInputs3(0x0758e495264cace99acef218843149d62c2de064a62936ad4161a862198b697f,
+0x1973c04a42a8996d5f38671e71d3be5778de8bd4854259e8bb461ffc56399278,
+0x2ff27debeb99ece34cb68ad054c3725eb8ee3857dc97961896e1691a1e76a6e5)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 27
+ark(i, q, HashInputs3(0x1b2316eab766bda304543e47474aef9ce91830a717686d5f74891d25eda9e3d2,
+0x29186c9e4543d1e838518a836cd160fea11d0399d40d4a44248b5b86773454d3,
+0x2fb5e09aaf4fb0f3e29d8037046242dfcfc25e0acb6942d709f339c80d62156f)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 28
+ark(i, q, HashInputs3(0x2d026814a08dc4497c6e249debdf0be4584d75fc1565dccb36549687fcdce5f7,
+0x1f530540f99193b2535359650505dcdbabd5dae0e7a25029eb427da77dfd29d5,
+0x059f1ad84cfaf236838c5dd78cf530e0f008631d7b911b108f9e9e35927a6a0c)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 29
+ark(i, q, HashInputs3(0x0f0cb8516e7358e13f8d29e3d7ca3b8772da3f34c38dd54b79f32a64d3a173a9,
+0x0a7b0e2f1fa2d3b05d30ba4010d38a04a413e0b31aefd44a62cfd75bdefaacb9,
+0x29785cee4a463f7c6a9d0faf92b5d7835e2cf7ed758ece279a896d3165f06e2a)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 30
+ark(i, q, HashInputs3(0x0550c951520a57c7ea1253ce4198f5151aaa801da0c49b6b1599e1c4e9cd4a41,
+0x0e4f3013a99a670d3b60456f721932b60627daa3be8aedfe7e4d84d5528d5a94,
+0x116159f5f5be7755a0d02232fed8d99f2bcf672536c1373bcbddc83cfe7fa461)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 31
+ark(i, q, HashInputs3(0x05f3b1526b9d0dcaec2d707ac31e87e8699a46c852ac9ef94abd5767de5cff47,
+0x095e04894544e210764ff538802121e800b39970585063fe611136276aa16fe5,
+0x2ade487b239c12bb48ff17f278758dca8dd1278972daef778f4c118dec3dcf39)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 32
+ark(i, q, HashInputs3(0x053e3aa1aba2476edb26d2463332a0e186ed428adeee869d822401930f9e4128,
+0x2df9eb23269d857b49c76080928a62e518402ec26aeace0c0d88790830e5e23f,
+0x224883469ecba978372e4e9412c3a434b7058d9d76f1d1869ca187ba7c1590d5)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 33
+ark(i, q, HashInputs3(0x0e0dba4c312b41bb89edcff913835681a106d97ea723735220c2cd806f16968b,
+0x2d9ce08f05ffc1eced293bd9f8fb89d7bef456b2b0fec016e795c4159325337b,
+0x162b649549c5adc5f781e37b7df61e7ce65f084b9825a23d9b6aa4bdc248e998)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 34
+ark(i, q, HashInputs3(0x2323a160c2346980dabf302e69e2cd88f307c1741dd583d36a06733f0a0936c8,
+0x047d629034c42906bff290342b2bafa612f08b0f888fd5c5ea02384c639adb87,
+0x16749375afac68bb87291b6167aa55e389e69932dacacbf3762fea925d7ee5c1)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 35
+ark(i, q, HashInputs3(0x14f633ba5f21231117f4d938bdba1ad6587f37312dd852ae22e508b2557524f9,
+0x2d02f2b341f65ad9d99e89cba23a797806168efeb2da8169f7893783c9acb782,
+0x25f565e2ea7cb2faff221c35deec04b825960e1b26edd936b39fd2c55a48bffa)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 36
+ark(i, q, HashInputs3(0x0febd4fef89c49b6b12c353e3efb358203aef5f13e2e25cdc88a9fae17a48ba9,
+0x11d001a9456099cd86c95cdef6bfda0434d6f52394944335cd6513bb41add7c3,
+0x1cc2b66fcd7d66e5ff81955bed3ce8d976aae481f100e40a5078171cfad690b4)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 37
+ark(i, q, HashInputs3(0x16a755dc1ad34b4562a9d57dd375ba68bbe5424df505a5df3d1d1c16fc6f516e,
+0x1c6d0e7f77d871f89f0324dad2cf370292f81cd8d567129b56384ebe8f14b078,
+0x278006a7fd3b154b9f25be54a013734b0a5372ff88377c26eb219039558a281d)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 38
+ark(i, q, HashInputs3(0x22eb2867a539a9b6ff51d4a48b4cd8419252d07c0665d0baf82acf8aef7de8ad,
+0x1a128b7188d4e3f1c22aa4bc4525bb26b50ebd80f50f267988bfe2e466e56a94,
+0x1d2faa5c28aa1d533513cba89750b93ce71b4510c4c215eb1974a59051c5b093)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 39
+ark(i, q, HashInputs3(0x28eb1c41a050dc8aa3f9a8037cb81f575e5b1acadc49e886e90bee7f1a485149,
+0x1e2586cbca2364027ac96ad1490271b866e723385e96c9f720a72b1f67078e6e,
+0x13c7e5c7724e33d7acec9e42ff8a4ee4f1ac8b6d0038f0faf4908e74ed06c9ba)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 40
+ark(i, q, HashInputs3(0x09bf059ab4925c39c6df84371572785d35e40be573fdf1be914ff6a87066923e,
+0x1b7375f3920e121871cbc71e92a2f47518d26a20f236f9194a5c48f86dfabd38,
+0x1494848f10672e535de527d6d0591019987f6e11ba33b6f6eb73dc59289c2e36)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 41
+ark(i, q, HashInputs3(0x195378dcafdea646a00ae78d9e30487a41aa8b8864ef4035a751c3b8ece36b0c,
+0x0b6a5c76a2a2a0db3843ef11176411388025f380e7a2d7ef1a6acafda5899b0e,
+0x0823e1d157f7c4712b4988af4a0396edb0950b1ccd001692e4eff681e14c2fef)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 42
+ark(i, q, HashInputs3(0x1633b048d2f14628309dbdf5a52736c0c5de9bf96d7fb9d13a2cb4562074b222,
+0x1f77ddd90f1eab23737895ec06a295467086513dec30b69738d226c82ed5e430,
+0x09c71939b3672bf6aaaebcf3717dab67765d8b94726c19d76d57e7aec751b94f)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 43
+ark(i, q, HashInputs3(0x048139270f0ef8f68d0b07c5d0005d7ad91d41fe306c8587bcf32d742ca1937d,
+0x003adfb1444cbf59321984d74e4434f3ed8a2f2376a41f5b9f52b1a6172c03e5,
+0x2eec4a7de823bf9531d3f842e9a9c74b0d0c4f8b56a5a25ede19b11f868b89ce)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 44
+ark(i, q, HashInputs3(0x0ea574b644b9f4cba43338122827d08f07484a4ceb24ac9d00c4a668838900af,
+0x054da055cd915cca9a0da4dd2cc86d99f08b287bba925305ecc28ed0bdd28990,
+0x02965a1d1f26fcd147af96711976f84bc3f08a50e8b8c38f7e83e8638b8f4706)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 45
+ark(i, q, HashInputs3(0x1f97b34b9622f33893182c89f86ef052ce8e46a3bfe2e33fa2a34c5e051d91b8,
+0x09a063b0b5ea468d93edeecfc089699f815eddbeb5e9369046740c7fea6d1cb5,
+0x1242820c24afd7cc595f7a3dd0534c6cf1f00c6a84291c65417397c07d46b778)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 46
+ark(i, q, HashInputs3(0x2983c402aec15b1d15f86a8d0378769832f0d5ed57aab1d11cc08b4509512da6,
+0x136371a4b44febffc233bd009ba8673764d2a73512e0eab44024cb97134a3dd8,
+0x2970729690bd8c8362bf5d0a76c215a03c26ef8a3e01eb91cb0e0c70ee25525e)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 47
+ark(i, q, HashInputs3(0x1c395ca2c5db9b254b9b0ef75ba5c0961750f646f9a6a68d60e33ca2ce84427d,
+0x02356c76528c4b9ae14f13f529206cce462782256984db7e1c3aad5d6f367f68,
+0x0c5a67378876463bdb3ff94d63e062ecef7bd040316eae92c8b035f693ec388e)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 48
+ark(i, q, HashInputs3(0x1b2aafe5f720bfc99ef31b5e48b35df72fcc920e66c3d90d86537ae35ce6bff5,
+0x067987b7638b9b082848f8eba41ee203d3e90fc591407a4d87f81f088f9612a5,
+0x148d4b0218744bcaccceb62b6313a57272a1545fd75d1a8ebbd736e4276d5e6d)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 49
+ark(i, q, HashInputs3(0x043f8986cc56fcf8e88680a1e8f1c247165bcdb9a6ca2d94c7418d10ad8ef847,
+0x1ef035d9ff4391c8001fbec565a65ca3cd3b7d0823bb062a9141503a79731f81,
+0x0a5162e6b35a320dec11ba8639a1192f6a0a464f84dd3899c4dab9d4ebbfe024)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 50
+ark(i, q, HashInputs3(0x2b5c89e9872aed76baa36b83f87eb830fe16d34169f9eb1628e6fbeaa940cf3b,
+0x0625c126499750374f2d3fd08940d1c0238fbd8da85bdf47928188e3f9010627,
+0x116bb85cfe6730c6448192438af1748221d2bb302b3258350cbebb1c5eccd965)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 51
+ark(i, q, HashInputs3(0x11aa65a2b09da598bb66377e54458c1dc4a7a3775f9c9cf51b2ebea5c871abfb,
+0x280fbd8eb1ccc50603dbc78eb0bf9cb903cd9df30f0f25f215ad4c3e1fb6baf5,
+0x0761a3e812087679e2748d24993af14664667aa3d713796c79507f2a63f8ed76)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 52
+ark(i, q, HashInputs3(0x2ba668f10abf878c8010155d539eb3cc30bb698f0062b1ed338c526fd12ac96d,
+0x2f4e05914ef7c1b2edf41c51266d3dc3e75c91b4c8dcefef873287120021ce0c,
+0x29274bd37d7863d5ec7a82f28bce6cf183fffd4f8176ad07b158f1df83c64804)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 53
+ark(i, q, HashInputs3(0x0c48fad80901003d9b0da5451971f8eee03e4c394ec29da5bf20a7bfad98e41b,
+0x16cf2cf2b9da985924e713d6559192ca6128ccf71b4fc7c7ee0142d1c32f20d9,
+0x00b7d9233273de8b110605a3a7820c13cf7019bacf7e5882a85d5689f15c8cc1)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 54
+ark(i, q, HashInputs3(0x0f291f5ae7e99aabc73894608962de3b6b76490754c0861de32a58b1cdb86e18,
+0x253406b596a33f5cf4b7e83f26116eb40d9707911b4290b2af400d58d92cf210,
+0x0812a4144d0d74bead1c5710d5239b640ccfc39fb66dab8eaf7cb3160fe35861)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 55
+ark(i, q, HashInputs3(0x2d81a6da9eebc5d5d239d13b961bdeebadcce19f0625de11a866bbcd0ef6f174,
+0x1a22dafad979cab2f645899290eb4daccd04feef3155d88567324d23646f5064,
+0x1bff73ae8dcaec7d09db8cdaf9ca7a9a5d685a1665855b0fd4ab9c15289f181a)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 56
+ark(i, q, HashInputs3(0x0a16f8b0834ada0c92b57e0f3e79e31f4bc6c4fbfe1e1c8a22cce904c33ee709,
+0x0ce7964c214c6389d581357e69009a141e16451def5e801d313bad966d99548e,
+0x2825c06bf975dfd5e8466bee81947fc45b6a3e704dfe0350a04a9ed19293b3e0)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 57
+ark(i, q, HashInputs3(0x265917cf756c617609b958a33522fbaad9bdef1dfde2da8fc4d33b067058283f,
+0x305a6987d779fbb9c92aad8c64fd4398a501b347cf24d3ac0374379c3b988e0c,
+0x19ba5a328c09be61df3216db8ccfca1392a45d45ef73c6d0bbdf798f52b0caea)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 58
+ark(i, q, HashInputs3(0x0569057f32180f19cf467121a3ff492228542300b440840ead6ed63ff96fc92e,
+0x300ade0e02d409aa9cbd650c5018bf52c8aa6b46c3523664404942451cdfd7f3,
+0x13e7afc3e5b8ae05421d3101c6dcd069e9730f8b9a4d28b707919627d82ed576)
+);
+sbox_partial(i, q);
+mix(i, q);
+// round 59
+ark(i, q, HashInputs3(0x302cebb80f47bc0d048b047e3ec4370a824d7741209189d6fafb2e923c95f674,
+0x0fec1e8606f9c19f09f3f6cbca8690f2a82c728121731c10b70a0a27425b7617,
+0x01b36c8b38abe36f31c85dfa0a4223c2127f9e70d6cb00acca7b4b820c42b4f8)
+);
+sbox_full(i, q);
+mix(i, q);
+// round 60
+ark(i, q, HashInputs3(0x1ae800dfd62a6f893226eaf46ed30630be2e658ca33bb2f8cb64a0ef6936167e,
+0x043f80240127ebfdfe64478e6b490c262943c0891c090e4f9e5da3a777397962,
+0x284cc004329f4e38c3ca0e7b3148a180f6769757d97698a510f153ed07c0618b)
+);
+sbox_full(i, q);
+mix(i, q);
+// round 61
+ark(i, q, HashInputs3(0x0a18cfea20c4b70b9cfafbd495e4fb978527dd3adcbb2a1b51338f37b58eef02,
+0x1bc11b2f6acc89e45bfc09641d1f50fe735abfd0fe6b4485e134afe45ad302a4,
+0x27af048a94639f26777e999118a6a53c031cc694291d09c52dc41cfbf548c07f)
+);
+sbox_full(i, q);
+mix(i, q);
+// round 62
+ark(i, q, HashInputs3(0x226ab5b34d54c58d1b8fdfa18c3718e0adb3382accc596eaaa90c06d43d6e8fd,
+0x2434cc868807d7dc6385a67ab520f6908cd692288595b76156d7b1191d024617,
+0x05f662504bc7e177ef21ed6b4d8ef9a3dce1e82b88b2d48c35c0e23b405a15cf)
+);
+sbox_full(i, q);
+mix(i, q);
+
+return i.t1;
+}
+
+
+ 
+ }

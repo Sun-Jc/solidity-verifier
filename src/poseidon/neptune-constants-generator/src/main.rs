@@ -75,7 +75,9 @@ fn to_be_bytes(scalar: FieldElement) -> [u8; 32] {
 #[cfg(feature = "bn256")]
 fn to_be_bytes(scalar: FieldElement) -> [u8; 32] {
     use nova_curves::group::ff::PrimeField;
-    scalar.to_repr()
+    let mut be_bytes = scalar.to_repr();
+    be_bytes.reverse();
+    be_bytes
 }
 
 #[derive(Parser, Debug)]
