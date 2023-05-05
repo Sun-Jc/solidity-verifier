@@ -8,3 +8,6 @@ target/
 
 # Ignores development broadcast logs (generated while interacting with contracts)
 broadcast/
+
+poseidon*.json
+.vscode/

@@ -5,10 +5,32 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[features]
+default = ["p2", "bn256"]
+
+p1 = []
+p2 = []
+p3 = []
+p5 = []
+p10 = []
+
+bn256 = []
+bls = []
+pallas = []
+vesta = []
+
 [dependencies]
+
+neptune-old = {version = "8.0.0", package = "neptune"}
 neptune = "9.0.0"
+
 generic-array = "0.14.7"
 blstrs = "0.7.0"
 clap = { version = "4.2.4", features = ["derive"] }
 serde_json = "1.0.96"
 pasta_curves = "0.5.1"
+
+nova_curves = { path = "../../../nova_curves"}
+
+
+
