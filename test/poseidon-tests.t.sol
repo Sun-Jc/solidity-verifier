@@ -7,7 +7,6 @@ import "src/poseidon/PoseidonNeptuneU24bls.sol";
 import "src/poseidon/PoseidonNeptuneU24vesta.sol";
 import "src/poseidon/PoseidonNeptuneU24pallas.sol";
 
-import "src/poseidon/PoseidonNeptuneU1bn256.sol";
 import "src/poseidon/PoseidonNeptuneU2bn256.sol";
 import "src/poseidon/PoseidonNeptuneU3bn256.sol";
 import "src/poseidon/PoseidonNeptuneU5bn256.sol";
@@ -59,11 +58,6 @@ contract PoseidonContractTest is Test {
     println!("{:?}", nums);
 
     let hasher: Poseidon<Scalar> = Poseidon::default();
-
-    {
-        let h = hasher.hash(&[nums[0]]);
-        println!("hash 1: {:?}", h);
-    }
 
     {
         let h = hasher.hash2(nums[0], nums[1]);
@@ -134,6 +128,26 @@ contract PoseidonContractTest is Test {
         assertEq(expected, actual);
     }
 
+    function testPoseidonNeptuneU5Bn256Compatibility() public {
+        // In neptune we use domain separation, so first field element doesn't hold actual data - rather service information
+        PoseidonU5bn256.HashInputs6 memory state = PoseidonU5bn256.HashInputs6(
+            0x0000000000000000000000000000000000000000000000000000000000000000,
+            0x2341651e0631b69b6bde41104345f83fdbcf474045188646a384bd68338de0b0,
+            0x06328ca1d9bca7bf6ef65a9027d1777bee956b723c81ff76196346f9303cc596,
+            0x11e7485ad691f31309312b3adf3da134c366737d7544d90c0f9d250049dd29e3,
+            0x1b935f734f6faa7e1d1e61dcd5cd0dc1c3b11287eae0d3e17af1ef3cbdb259b5,
+            0x2a73544c797ee35bc0c335d3a8bbad00dc372662821cc42029e2bdfb9f9fc0cc
+        );
+
+        uint actual = PoseidonU5bn256.hash(state, bn256CurveModulus);
+
+        console.logBytes32(bytes32(actual));
+
+        uint expected = 0x22249a6ace967004dac1660a410c4b4255c3a7c47156816c0c7cf2a52e228f07;
+
+        assertEq(expected, actual);
+    }
+
     function testPoseidonNeptuneU2Bn256Compatibility() public {
         // In neptune we use domain separation, so first field element doesn't hold actual data - rather service information
         PoseidonU2bn256.HashInputs3 memory state = PoseidonU2bn256.HashInputs3(
@@ -147,22 +161,6 @@ contract PoseidonContractTest is Test {
         console.logBytes32(bytes32(actual));
 
         uint expected = 0x116410b5f98319955025b3134063485ad3aaf4b58429163c3f8f00b3e3dd6c40;
-
-        assertEq(expected, actual);
-    }
-
-    function testPoseidonNeptuneU1Bn256Compatibility() public {
-        // In neptune we use domain separation, so first field element doesn't hold actual data - rather service information
-        PoseidonU1bn256.HashInputs2 memory state = PoseidonU1bn256.HashInputs2(
-            0x0000000000000000000000000000000000000000000000000000000000000000,
-            0x180d7e36fdce01718d2eace09c24d29090441204d62a3c9dabe8773b0bad1f77
-        );
-
-        uint actual = PoseidonU1bn256.hash(state, bn256CurveModulus);
-
-        console.logBytes32(bytes32(actual));
-
-        uint expected = 0x21bc4471a748d39a483d4e40ba2ed2c8fe9a9a23b5e1512dda38af5590633fb6;
 
         assertEq(expected, actual);
     }
