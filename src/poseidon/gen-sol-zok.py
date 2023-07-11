@@ -25,10 +25,18 @@ subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDO
 result = subprocess.run(['python3', 'src/poseidon/contract_codegen.py', fn], stdout=subprocess.PIPE)
 body = result.stdout.decode('utf-8')
 
-
 sol = full_sol(t, c, body)
 sol_file = f"PoseidonNeptuneU{t}{c}.sol"
+zok_file = f"PoseidonNeptuneU{t}{c}.zok"
 
 with open(f"src/poseidon/{sol_file}", "w") as f:
     f.write(sol)
     print(f"import \"src/poseidon/{sol_file}\";")
+
+
+result = subprocess.run(['python3', 'src/poseidon/zokrates_codegen.py', fn], stdout=subprocess.PIPE)
+body = result.stdout.decode('utf-8')
+
+with open(f"src/poseidon/{zok_file}", "w") as f:
+    f.write(body)
+

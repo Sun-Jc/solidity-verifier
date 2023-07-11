@@ -1,6 +1,7 @@
 import json
+import sys
 
-jsonPath = 'poseidon-5-bn256.json'
+jsonPath = sys.argv[1]
 
 params = json.load(open(jsonPath))
 
@@ -27,7 +28,7 @@ def gen_mix_func():
     return mix_func
 
 
-print(gen_mix_func())
+# print(gen_mix_func())
 
 
 RF = params['full_rounds']
@@ -53,6 +54,52 @@ for i in range(RF + RP):
     
     lines.append('i = mix(i);')
         
-print('\n'.join(lines))
+main = '\n'.join(lines)
 
-params
+
+pre = r'''
+def ark<N>(field[N] mut i, field[N] c) -> field[N] {
+    for u32 id in 0..N {
+        i[id] = i[id] + c[id];
+    }
+    return i;
+}
+
+def sbox_full<N>(field[N] i) -> field[N] {
+    field[N] mut o = [0; N];
+
+    for u32 id in 0..N {
+        o[id] = i[id] * i[id];
+        o[id] = o[id] * o[id];
+        o[id] = i[id] * o[id];
+    }
+
+    return o;
+}
+
+def sbox_partial(field i0) -> field {
+    field mut o0 = i0 * i0;
+    o0 = o0 * o0;
+    o0 = i0 * o0;
+    return o0;
+}
+'''
+
+code = pre + '''
+
+{mix}
+
+def main(field[{n}] inputs) -> field {{
+    field[{np1}] mut i = [0; {np1}];
+    for u32 id in 0..{n} {{
+        i[id+1] = inputs[id];
+    }}
+
+{main}
+
+ return i[1];
+}}
+
+'''.format(mix=gen_mix_func(), main=main, n=N-1, np1=N)
+
+print(code)
