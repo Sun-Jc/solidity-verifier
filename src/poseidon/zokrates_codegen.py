@@ -58,6 +58,10 @@ main = '\n'.join(lines)
 
 
 pre = r'''
+#pragma curve bn128
+
+// Author: JcSun
+
 def ark<N>(field[N] mut i, field[N] c) -> field[N] {
     for u32 id in 0..N {
         i[id] = i[id] + c[id];

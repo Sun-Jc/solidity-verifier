@@ -52,6 +52,11 @@ type Arity = generic_array::typenum::U5;
 #[cfg(feature = "p5")]
 const state_size: usize = 6;
 
+#[cfg(feature = "p6")]
+type Arity = generic_array::typenum::U6;
+#[cfg(feature = "p6")]
+const state_size: usize = 7;
+
 #[cfg(feature = "p10")]
 type Arity = generic_array::typenum::U10;
 #[cfg(feature = "p10")]
